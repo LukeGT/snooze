@@ -213,7 +213,7 @@ exports.api = (setup) ->
     fs.statSync("#{ config.directory }/#{ e }").isDirectory()
 
   for r in resources
-    api[r] = require "#{ config.directory }/#{ r }"
+    api[r] = require "#{ process.cwd() }/#{ config.directory }/#{ r }"
 
   console.log api
 
