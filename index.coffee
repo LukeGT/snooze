@@ -195,6 +195,22 @@ apiTester = (req, res) ->
     granularity: config.tokenGranularity
 
 
+recursiveRequire = (api, directory) ->
+  
+  resources = fs.readdirSync(directory)
+
+  for r in resources
+    subdir = "#{ directory }/#{ r }"
+    stats = fs.statSync(subdir)
+
+    if stats.isDirectory()
+      api[r] = {}
+      recursiveRequire api[r], subdir
+    else if stats.isFile()
+      r = r.replace /\..*$/, ''
+      api[r] = require "#{ process.cwd() }/#{ subdir }"
+
+
 #
 # Contructs and returns the middleware according to the setup information given
 # Note: uses synchronous file system methods - only use this method during server setup. 
@@ -209,11 +225,7 @@ exports.api = (setup) ->
   config[k] = v for k, v of setup
 
   # Read folders from the rest directory
-  resources = fs.readdirSync(config.directory).filter (e) ->
-    fs.statSync("#{ config.directory }/#{ e }").isDirectory()
-
-  for r in resources
-    api[r] = require "#{ process.cwd() }/#{ config.directory }/#{ r }"
+  recursiveRequire api, config.directory
 
   console.log api
 
