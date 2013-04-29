@@ -162,7 +162,9 @@ checkAuth = (req, callback) ->
   # Reduce the granularity of the time in order to improve authentication reliability
   time = Math.floor Date.now() / config.tokenGranularity
   console.log config.getPassword.toString()
-  config.getPassword userId, (password) ->
+  config.getPassword userId, (password, error) ->
+
+    return callback "Authentication failed: problem while checking password: #{error}" if error
 
     # Check if the hash matches the current time and password, or surrounding time or password
     if hash in [ time, time - 1, time + 1 ].map( (a) -> sha1 "#{ password }#{ a }" )
@@ -190,7 +192,7 @@ sendError = (res, errors, status) ->
 
 apiTester = (req, res) ->
 
-  res.send coffeecup.render require('./tester.coffee'),
+  res.send coffeecup.render require('./tester'),
     headername: config.tokenHeader
     granularity: config.tokenGranularity
 
@@ -199,16 +201,16 @@ recursiveRequire = (api, directory) ->
   
   resources = fs.readdirSync(directory)
 
-  for r in resources
-    subdir = "#{ directory }/#{ r }"
+  for resource in resources
+    subdir = "#{ directory }/#{ resource }"
     stats = fs.statSync(subdir)
 
     if stats.isDirectory()
-      api[r] = {}
-      recursiveRequire api[r], subdir
+      api[resource] = {}
+      recursiveRequire api[resource], subdir
     else if stats.isFile()
-      r = r.replace /\..*$/, ''
-      api[r] = require "#{ process.cwd() }/#{ subdir }"
+      resource = resource.replace /\..*$/, ''
+      api[resource] = require "#{ process.cwd() }/#{ directory }/#{ resource }"
 
 
 #
