@@ -39,12 +39,12 @@ config =
 #
 # Each object can have POST/GET/PUT/DELETE as properties to define an endpoint.
 # These must contain an object which contains a property "method",
-# which is called when the enpoint is reached.  It looks like You can't have any more HTTP methods
+# which is called when the enpoint is reached.  You can't have any more HTTP methods
 # within here, but you can have an "authentication" property.
 #
 # Each object can also have an arbitrary name attached, which corresponds to
-# another level in the path.  E.g. /api/users/email.  This object in turn can have
-# HTTP methods attached to it.  
+# another level in the path.  E.g. the property "email" will represent the
+# endpoint at /api/users/email.  This object in turn can have HTTP methods attached to it.
 
 api = {}
 
