@@ -1,0 +1,29 @@
+{
+  "name": "snooze",
+  "version": "0.0.0",
+  "description": "A REST server framework for Node.JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.js",
+    "prepublish": "coffee -c *.coffee"
+  },
+  "devDependencies": {
+    "coffee-script": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/LukeGT/snooze.git"
+  },
+  "keywords": [
+    "rest",
+    "express",
+    "connect",
+    "api",
+    "middleware",
+    "simple",
+    "framework"
+  ],
+  "author": "Luke Tsekouras",
+  "license": "BSD",
+  "gitHead": "6e9638ffbccb7a00fb751c8299362c357e13a0af"
+}
